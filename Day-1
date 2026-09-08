@@ -1,1 +1,97 @@
+Test case-01
+package Assessment_Day_1;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.io.FileHandler;
+
+public class testcase_01 {
+
+	public static void main(String[] args) throws InterruptedException, IOException {
+		WebDriver d = new ChromeDriver();
+		d.manage().window().maximize();
+		d.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		
+		//launch SauceDemo application
+		d.get("https://www.saucedemo.com/");
+		Thread.sleep(2000);
+		
+		//login to the application
+		d.findElement(By.id("user-name")).sendKeys("standard_user");
+		d.findElement(By.id("password")).sendKeys("secret_sauce");
+		d.findElement(By.id("login-button")).click();
+		Thread.sleep(2000);
+		
+		//scroll down using javascriptexecutor using scrollTo method
+		JavascriptExecutor js = (JavascriptExecutor)d;
+		js.executeScript("window.scrollTo(0, 800)");
+		Thread.sleep(2000);
+		
+		//take screen shot of the webpage after scrolling
+		TakesScreenshot tk = (TakesScreenshot)d;
+		File src = tk.getScreenshotAs(OutputType.FILE);
+		File des = new File("./screenshot/products-page.png");
+		FileHandler.copy(src,des);
+	}
+}
+
+
+
+Test case -02
+package Assessment_Day_1;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class testcase_02 {
+
+	public static void main(String[] args) throws InterruptedException {
+		WebDriver d = new ChromeDriver();
+		d.manage().window().maximize();
+		d.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		
+		//launch the browser
+		d.get("https://www.myntra.com");
+		Thread.sleep(2000);
+		
+		//search for the product
+		d.findElement(By.cssSelector("[class='desktop-searchBar']")).sendKeys("bags");
+		d.findElement(By.cssSelector("[class='myntraweb-sprite desktop-iconSearch sprites-search']")).click();
+		
+		// add the product to wish list
+		WebElement element = d.findElement(By.xpath("(//span[@class='myntraweb-sprite product-notWishlistedIcon sprites-notWishlisted'])[2]"));
+		Thread.sleep(4000);
+		
+		//Type cast WebDriver to JavascriptExecutor(Downcast)
+		JavascriptExecutor js = (JavascriptExecutor)d;
+		
+		//handling the hidden element
+		js.executeScript("arguments[0].click()", element);
+
+		//verify whether product is added or not
+		String url=d.getCurrentUrl();
+		
+		if(url.contains("https://www.myntra.com/login?referer=https://www.myntra.com/bags"))
+			System.out.println("Product is added to wishlist");
+		else
+			System.out.println("Product is not added to wishlist");
+		Thread.sleep(2000);
+		
+		//close the browser
+		d.quit();
+	}
+}
 
