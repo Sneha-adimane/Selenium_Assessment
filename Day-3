@@ -1,0 +1,99 @@
+Testcase-01
+
+package Assessment_Day_3;
+
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class Testcase_01 {
+
+	public static void main(String[] args) throws InterruptedException {
+		//We are avoiding notification popup
+		
+		//1.create object for browser specific options
+		ChromeOptions option=new ChromeOptions();
+				
+		//2.call addArguments() using ref variable(option) and pass corect command
+		option.addArguments("--disable-notifications");
+				
+		//pass the option ref variable while launching the browser as an argument
+		WebDriver d = new ChromeDriver(option);
+				
+		//Maximize the browser
+		d.manage().window().maximize();
+				
+		//Apply implicit wait
+		d.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+				
+		//naviagate to easemytrip application
+		d.get("https://easemytrip.com/");
+		Thread.sleep(2000);
+				
+		//select one way
+		d.findElement(By.xpath("//li[@id='oway']")).click();
+		Thread.sleep(2000);
+				
+		//Enter any state  in the From field and select a valid suggestion.
+		//FROM field
+		d.findElement(By.xpath("//input[@id='FromSector_show']")).click();
+		Thread.sleep(2000);
+		d.findElement(By.xpath("//input[@id='a_FromSector_show']")).sendKeys("Bangalore");
+		Thread.sleep(2000);
+		d.findElement(By.xpath("//span[@id='spnBengaluru']")).click();
+		Thread.sleep(2000);
+				
+		//Enter another state  in the To field and select a valid suggestion.
+		//TO field
+		d.findElement(By.xpath("//input[@id='a_Editbox13_show']")).sendKeys("Mumbai");
+		Thread.sleep(2000);
+		d.findElement(By.xpath("//p[@id='airportMumbai']")).click();
+		Thread.sleep(2000);
+				
+		//Click the Departure Date field.
+		//Select any available future date from the calendar.
+				
+		d.findElement(By.xpath("//img[@id='img2Nex']")).click();
+		Thread.sleep(1000);
+		d.findElement(By.xpath("//img[@id='img2Nex']")).click();
+		Thread.sleep(1000);
+				
+		d.findElement(By.xpath("//li[@id='snd_4_10/12/2026']")).click();
+		Thread.sleep(2000);
+				
+		//Click Traveller & Class.
+		d.findElement(By.xpath("//div[@id='myFunction4']")).click();
+		Thread.sleep(2000);
+				
+		//Select 2 Adults and keep the class as Economy.
+		d.findElement(By.xpath("//button[@id='add']")).click();
+		Thread.sleep(2000);
+		d.findElement(By.xpath("//input[@id='rbEconomy']")).click();
+		Thread.sleep(2000);
+		d.findElement(By.xpath("//a[@id='traveLer']")).click();
+		Thread.sleep(2000);
+				
+		//Click Search.
+		d.findElement(By.xpath("//input[@value='Search']")).click();
+		Thread.sleep(2000);
+				
+		//Verify that the flight-results page is displayed.				
+		//using getTitle() to verify
+		String title = d.getTitle();
+
+		if(title.contains("EaseMyTrip.com Lowest Airfare, Flight Tickets, Cheap Air Tickets – EaseMyTrip.com"))
+			System.out.println("Flight results page is displayed");
+		else
+			System.out.println("Flight results page is not displayed");
+				
+		Thread.sleep(2000);
+				
+		//close the browser
+		d.quit();
+	}
+}
