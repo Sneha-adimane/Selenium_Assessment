@@ -77,13 +77,13 @@ public class testcase_02 {
 		//get dom attribute and dom property before passing value
 		WebElement email = d.findElement(By.id("_R_1h6kqsqppb6amH1_"));
 		System.out.println("Before Dom Attribute:"+email.getDomAttribute("value"));
-		System.out.println("Before Dom Property:"+email.getDomProperty("vlaue"));
+		System.out.println("Before Dom Property:"+email.getDomProperty("value"));
 		Thread.sleep(2000);
 		
 		//get dom attribute and dom property after passing value
 		email.sendKeys("Sneha@123");
 		System.out.println("After Dom Attribute:"+email.getDomAttribute("value"));
-		System.out.println("After Dom Property:"+email.getDomProperty("vlaue"));
+		System.out.println("After Dom Property:"+email.getDomProperty("vlalue"));
 		Thread.sleep(2000);
 		
 		//click on create account
