@@ -1,0 +1,116 @@
+Testcase-1   //size of text field
+
+package demo;
+
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class text_filed_size_ {
+
+	public static void main(String[] args) throws InterruptedException {
+		WebDriver d = new ChromeDriver();
+		d.manage().window().maximize();
+		d.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		d.get("https://www.facebook.com/");
+		Thread.sleep(2000);
+		List<WebElement> tf = d.findElements(By.tagName("input"));
+		int count = tf.size();
+		System.out.println(count);
+		for(WebElement ele: tf)
+		{
+			System.out.println(ele.getAccessibleName());
+			if(ele.getAccessibleName().equals("Email address or mobile number"))
+				ele.sendKeys("Sneha");
+			else
+				ele.sendKeys("Sneha@123");
+		}
+		d.quit();
+		
+	}
+}
+
+
+Testcase-02 //zomato login
+
+package demo;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class zomato {
+
+	public static void main(String[] args) throws InterruptedException {
+		WebDriver d = new ChromeDriver();
+		d.manage().window().maximize();
+		d.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		d.get("https://www.zomato.com/bangalore/delivery");
+		Thread.sleep(2000);
+		d.findElement(By.xpath("//button[text()='Log in']")).click();
+		Thread.sleep(2000);
+		WebElement id = d.findElement(By.id("auth-login-ui"));
+		d.switchTo().frame(id);
+		d.findElement(By.xpath("//input[@type='number']")).sendKeys("9663883349");
+		d.switchTo().defaultContent();
+		Thread.sleep(2000);
+		String text = d.findElement(By.xpath("//div[text()='Delivery']")).getText();
+		if(text.equals("Delivery"))
+			System.out.println("I am in main page");
+		else
+			System.out.println("I am in frame page");
+	}
+}
+
+
+Testcase-03  //bigbasket add the product to cart and verify
+
+package demo;
+
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class basket_dynamicdropdown {
+
+	public static void main(String[] args) throws InterruptedException {
+		WebDriver d = new ChromeDriver();
+		d.manage().window().maximize();
+		d.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		d.get("https://www.bigbasket.com/pb/boss/");
+		Thread.sleep(2000);
+		WebElement search = d.findElement(By.xpath("(//input[@type='text'])[2]"));
+		search.click();
+		search.sendKeys("Fruits");
+		Thread.sleep(2000);
+		List<WebElement> suggestion = d.findElements(By.cssSelector("[class='overscroll-contain']"));
+		WebElement s = null;
+		for(WebElement ele : suggestion)
+		{
+			System.out.println(ele.getText());
+			if(ele.getText().contains("Indian Apple - Royal Gala, Economy"))
+				d.findElement(By.xpath("(//button[text()='Add'])[12]")).click();
+		}
+		d.findElement(By.cssSelector("[d='M-1-1h16v16H-1z']")).click();
+		Thread.sleep(2000);
+		d.findElement(By.cssSelector("[class='px-1.5 w-9 cursor-pointer rounded-2xs py-1.5  bg-rossoCorsa-50 relative']")).click();
+		System.out.println(d.getCurrentUrl());
+		if(d.getCurrentUrl().equals("https://www.bigbasket.com/pb/boss/?next=%2Fbasket%2F%3Fnc%3Dnb"))
+			System.out.println("It is verified");
+		else
+			System.out.println("not verified");
+		
+		d.quit();
+	}
+}
