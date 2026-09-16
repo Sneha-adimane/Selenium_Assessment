@@ -1,0 +1,117 @@
+Testcase
+
+package PomImplementation;
+
+import java.awt.AWTException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.List;
+import java.util.Properties;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import pomUtilities.OrangeHRM_Candidatespage;
+import pomUtilities.OrangeHRM_HomePage;
+import pomUtilities.OrangeHRM_Loginpage;
+import pomUtilities.OrangeHRM_RecruitmentPage;
+
+public class OrangeHRM_Day8_Assessment {
+
+	public static void main(String[] args) throws IOException, InterruptedException, AWTException {
+		//PROPERTY FILE
+		FileInputStream file = new FileInputStream("./src/test/resources/DDT/common_data_OHRM.properties");
+		Properties p = new Properties();
+		p.load(file);
+		
+		String browser = p.getProperty("browser");
+		String url = p.getProperty("url");
+		String un = p.getProperty("username");
+		String pass = p.getProperty("password");
+		
+		WebDriver driver = null;
+		if(browser.equals("chrome"))
+			driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.get(url);
+		
+		//LOGIN PAGE
+		OrangeHRM_Loginpage d = new OrangeHRM_Loginpage(driver);
+		
+		d.getUserName(un);
+		d.getPassword(pass);
+		d.getLoginbtn();
+		
+		Thread.sleep(2000);
+		
+		//RECRUITMENT LINK
+		OrangeHRM_HomePage d1 = new OrangeHRM_HomePage(driver);
+		d1.getRecruitmentLink();
+		
+		//EXCEL FILE
+		FileInputStream fis = new FileInputStream("./src/test/resources/DDT/OrangeHRM_Recruitment_details.xlsx");
+		Workbook w = WorkbookFactory.create(fis);
+		Sheet sh = w.getSheet("sheet1");
+		Row row = sh.getRow(1);
+		
+		
+		String fn = row.getCell(0).getStringCellValue();
+		String ln = row.getCell(2).getStringCellValue();
+		String mail = row.getCell(3).getStringCellValue();
+		String num = row.getCell(4).getStringCellValue();
+		String res = row.getCell(5).getStringCellValue();
+		String cName = row.getCell(6).getStringCellValue();
+		
+		//ADD CANDIDATES
+		OrangeHRM_RecruitmentPage d2 = new OrangeHRM_RecruitmentPage(driver);
+		d2.getAddBtn();
+		d2.getFN(fn);
+		d2.getLN(ln);
+		Thread.sleep(2000);
+		d2.getVacancy();
+		Thread.sleep(2000);
+		d2.getEmail(mail);
+		Thread.sleep(2000);
+		d2.getContact_num(num);
+		Thread.sleep(2000);
+		d2.getResume(res);		
+		Thread.sleep(2000);
+		d2.getSavebtn();
+		Thread.sleep(2000);
+		d2.getCandidates_btn();
+		
+		//CANDIDATES
+		OrangeHRM_Candidatespage d3 = new OrangeHRM_Candidatespage(driver);
+		d3.getJob_title();
+		Thread.sleep(4000);
+		d3.getVacancy();
+		Thread.sleep(3000);
+		d3.getHR();
+		Thread.sleep(3000);
+		d3.getStatus();
+		Thread.sleep(3000);
+		d3.getC_name(cName);
+		Thread.sleep(3000);
+		d3.getSearch();
+		
+		//VERIFY;
+		List<WebElement> lis = driver.findElements(By.xpath("//div[text()='Sneha  K']"));
+		if(lis.size()>0)
+			System.out.println("record found");
+		else
+			System.out.println("no record found");
+		
+		//CLOSE THE BROWSER
+		driver.quit();
+	}
+}
+
