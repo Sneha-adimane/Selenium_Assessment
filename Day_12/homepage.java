@@ -17,8 +17,15 @@ WebDriver d;
 	
 	@FindBy(xpath="//span[text()='Recruitment']")
 	private WebElement RecruitmentLink;
+	
+	@FindBy(xpath = "//span[text()='My Info']")
+	private WebElement infoLink;
 
 	public void getRecruitmentLink() {
 		RecruitmentLink.click();
+	}
+	
+	public void getInfoLink() {
+		infoLink.click();
 	}
 }

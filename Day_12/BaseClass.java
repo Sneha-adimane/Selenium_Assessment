@@ -80,8 +80,12 @@ public class BaseClass {
 	}
 	
 	@AfterMethod
-	public void am() {
+	public void am() throws InterruptedException {
 		System.out.println("logout");
+		logoutpage lo = new logoutpage(d);
+		lo.getDd();
+		Thread.sleep(2000);
+		lo.getLogoutbtn();
 	}
 
 }
